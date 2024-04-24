@@ -115,6 +115,7 @@ com/vtxlab/projectol/backend_oscar/entity/user/UserScore$UserScoreBuilder.class
 com/vtxlab/projectol/backend_oscar/payload/request/user/UserTestCaseRequest.class
 com/vtxlab/projectol/backend_oscar/controllers/group/GroupOperation.class
 com/vtxlab/projectol/backend_oscar/exception/QuestionInputFormatException.class
+com/vtxlab/projectol/backend_oscar/ServerBackendApplication.class
 com/vtxlab/projectol/backend_oscar/payload/request/user/UserQuestionSubmitRequest.class
 com/vtxlab/projectol/backend_oscar/payload/request/event/EventRequest.class
 com/vtxlab/projectol/backend_oscar/payload/response/user/GroupScoreDTO$GroupResult.class
