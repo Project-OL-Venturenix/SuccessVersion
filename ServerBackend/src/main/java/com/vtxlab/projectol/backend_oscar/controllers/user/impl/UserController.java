@@ -87,27 +87,14 @@ public class UserController implements UserOperation {
     Optional<User> userData = userRepository.findById(id);
 
     if (userData.isPresent()) {
-      User builder = User.builder()//
-          .firstName(userRequest.getFirstName())//
-          .lastName(userRequest.getLastName())//
-          .mobile(userRequest.getMobile())//
-          .email(userRequest.getEmail())//
-          .userName(userRequest.getUserName())//
-          .password(encoder.encode(userRequest.getPassword()))//
-          .company(userRequest.getCompany())//
-          .title(userRequest.getTitle())//
-          .pyExperience(userRequest.getPyExperience())//
-          .jvExperience(userRequest.getJvExperience())//
-          .jsExperience(userRequest.getJsExperience())//
-          .csExperience(userRequest.getCsExperience())//
-          .saExperience(userRequest.getSaExperience())//
-          .status(userRequest.getStatus())//
-          .createdDate(LocalDateTime.now())//
-          .createdBy(userRequest.getCreatedBy())//
-          .updatedDate(LocalDateTime.now())//
-          .updatedBy(userRequest.getUpdatedBy())//
-          .build();
-      return new ResponseEntity<>(userRepository.save(builder), HttpStatus.OK);
+      userData.get().setFirstName(userRequest.getFirstName());
+      userData.get().setLastName(userRequest.getLastName());
+      userData.get().setUserName(userRequest.getUserName());
+      userData.get().setEmail(userRequest.getEmail());
+      userData.get().setMobile(userRequest.getMobile());
+
+      return new ResponseEntity<>(userRepository.save(userData.get()),
+          HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
@@ -170,7 +157,8 @@ public class UserController implements UserOperation {
     if (optionalUser.isPresent()) {
       UserDTO user = Mapper.map(optionalUser.get());
       user.setEvents(Mapper.map(result.get()));
-      log.info("user: " + user);
+      log.info(
+          "user id : " + user.getId() + "user Name : " + user.getUserName());
 
       // Check if the user is associated with the given event ID
       return user;

@@ -33,7 +33,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+// @EqualsAndHashCode
 @Table(name = "users",
     uniqueConstraints = {@UniqueConstraint(columnNames = "userName"),
         @UniqueConstraint(columnNames = "email")})

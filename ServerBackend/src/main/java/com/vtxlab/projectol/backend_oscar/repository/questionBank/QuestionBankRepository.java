@@ -10,9 +10,9 @@ import com.vtxlab.projectol.backend_oscar.entity.questionBank.QuestionBank;
 public interface QuestionBankRepository
     extends JpaRepository<QuestionBank, Long> {
   @Query(
-      value = "SELECT test_compute_case FROM questions WHERE question_id = ?1",
+      value = "SELECT test_Answer FROM questions WHERE question_id = ?1",
       nativeQuery = true)
-  String getTestComputeCase(Long questionId);
+  String getTestAnswer(Long questionId);
 
   @Query(
       value = "SELECT method_signatures FROM questions WHERE question_id = ?1",

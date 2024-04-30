@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const mkdirp = require('mkdirp');
 const axios = require('axios');
-const baseUrl = 'http://localhost:8082';
+const baseUrl = 'http://ec2-13-212-138-4.ap-southeast-1.compute.amazonaws.com:8082';
 
 let question;
 module.exports = {
@@ -34,7 +34,7 @@ module.exports = {
         //   throw new Error('Invalid JSON data format: Missing or invalid string properties');
         // }
 
-        const javaClass = `${jsonDataWithoutClosingBrace}\n\n${mainMethod}\n\n`;
+        const javaClass = `${jsonDataWithoutClosingBrace}${mainMethod}`;
         // console.log('jsonDataWithoutClosingBrace : ' + jsonDataWithoutClosingBrace);
         // console.log('mainMethod : ' + mainMethod);
 
@@ -80,11 +80,6 @@ module.exports = {
           throw new Error('Invalid data received from API');
         }
 
-        // const { classDeclaration, code } = jsonData;
-
-        // if (!classDeclaration || !code) {
-        //   throw new Error('Missing code or classDeclaration in API response');
-        // }
 
         const jsonString = JSON.stringify(jsonData);
         console.log('Converted JSON string:', jsonString);
@@ -112,6 +107,7 @@ module.exports = {
   getFile(lang, questionId, callback) {
     let file = '';
     const language = lang.toLowerCase();
+    console.log('questionId : ' + questionId);
     if (language === 'java') {
       this.saveJsonFile(questionId, () => {
         this.startConvertJsonToJava(questionId, (javaCode) => {
@@ -134,7 +130,8 @@ module.exports = {
             throw err;
           }
         });
-      });
+      }
+      );
     } else if (language === 'c') {
       file = path.join(__dirname, '../templates', 'Hello.c');
     } else if (language === 'c++') {

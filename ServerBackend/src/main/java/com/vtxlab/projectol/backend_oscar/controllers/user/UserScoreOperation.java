@@ -17,9 +17,9 @@ import jakarta.validation.Valid;
 public interface UserScoreOperation {
 
     @PostMapping("/userscores/addScore")
-    boolean addScore(@RequestParam String eventid, //
-            @RequestParam String userid, //
-            @RequestParam String questionid, //
+    boolean addScore(@RequestParam String eventId, //
+            @RequestParam String userId, //
+            @RequestParam String questionId, //
             @RequestParam String testcasePassTotal,
             @RequestBody SubmitTimeRunTimeDTO submitTimeRunTimeDTO);
 
@@ -36,7 +36,7 @@ public interface UserScoreOperation {
     @DeleteMapping("/userscores/{id}")
     ResponseEntity<?> deleteUserScore(@PathVariable String id);
 
-    @GetMapping("/usertestcases/eventid/{eventid}")
+    @GetMapping("/usertestcases/eventid/{eventId}")
     ResponseEntity<UserScoreResult> getUserTestCaseByEventId(
-            @PathVariable String eventid);
+            @PathVariable String eventId);
 }

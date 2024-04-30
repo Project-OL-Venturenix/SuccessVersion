@@ -76,7 +76,7 @@ public class TestCaseController implements TestCaseOperation {
 
   public ResponseEntity<List<TestCaseDTO>> getAllTestCases() {
     try {
-      List<TestCaseDTO> testcases =
+      List<TestCaseDTO> testCases =
           testcaseRepository.findAll().stream().map(e -> {
             QuestionBank targetQuestionBankData =
                 questionRepository.findById(e.getQuestionBank().getQuestionId())
@@ -85,7 +85,7 @@ public class TestCaseController implements TestCaseOperation {
             return TestCaseDTO.builder()//
                 .id(e.getQuestionBank().getQuestionId())//
                 .methodSignatures(targetQuestionBankData.getMethodSignatures())//
-                .testComputeCase(targetQuestionBankData.getTestComputeCase())//
+                .testAnswer(targetQuestionBankData.getTestAnswer())//
                 .input1(e.getInput1())//
                 .input2(e.getInput2())//
                 .input3(e.getInput3())//
@@ -93,10 +93,10 @@ public class TestCaseController implements TestCaseOperation {
                 .build();//
           })//
               .collect(Collectors.toList());//
-      if (testcases.isEmpty()) {
+      if (testCases.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
-      return new ResponseEntity<>(testcases, HttpStatus.OK);
+      return new ResponseEntity<>(testCases, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -138,17 +138,11 @@ public class TestCaseController implements TestCaseOperation {
             () -> new RuntimeException("Error: Question is not found."));
 
     if (testcaseData.isPresent()) {
-      TestCase result = TestCase.builder()//
-          .testcaseId(testcaseData.get().getTestcaseId())//
-          // .questionBank(testcaseData.get().getQuestionBank())//
-          .questionBank(targetQuestionBankData)//
-          .createdDate(testcaseData.get().getCreatedDate())//
-          .createdBy(testcaseData.get().getCreatedBy())//
-          .updatedDate(LocalDateTime.now())//
-          .updatedBy(testcaseData.get().getUpdatedBy())//
-          .build();
-
-      return new ResponseEntity<>(testcaseRepository.save(result),
+      testcaseData.get().setExpectedOutput(id);
+      testcaseData.get().setInput1(id);
+      testcaseData.get().setInput2(id);
+      testcaseData.get().setInput3(id);
+      return new ResponseEntity<>(testcaseRepository.save(testcaseData.get()),
           HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

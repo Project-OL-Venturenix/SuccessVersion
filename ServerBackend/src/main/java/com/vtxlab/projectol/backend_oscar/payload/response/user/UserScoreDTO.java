@@ -20,7 +20,7 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @JsonPropertyOrder({ "id", "event", "user", "question", "submitTime",
-    "resultOfPassingTestecase", "bonusUnder30Mins",
+    "resultOfPassingTestCase", "bonusUnder30Mins",
     "bonusWithinQuestionRuntime", "runtimeByMsec", "status", "createdDate",
     "updatedDate" })
 public class UserScoreDTO {
@@ -29,7 +29,7 @@ public class UserScoreDTO {
     private UserDTO user;
     private QuestionBankDTO question;
     private LocalDateTime submitTime;
-    private Integer resultOfPassingTestecase;
+    private Integer resultOfPassingTestCase;
     private String bonusUnder30Mins;
     private String bonusWithinQuestionRuntime;
     private Integer runtimeByMsec;

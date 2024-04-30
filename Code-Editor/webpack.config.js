@@ -34,8 +34,8 @@ const commonConfig = merge([
       ],
     },
     plugins: [
-      // new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development') }),
-      new webpack.DefinePlugin({ 'process.env.NODE_ENV': process.env.NODE_ENV || 'development' }),
+      new webpack.DefinePlugin({ 'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development') }),
+      // new webpack.DefinePlugin({ 'process.env.NODE_ENV': process.env.NODE_ENV || 'development' }),
       new CleanWebpackPlugin([outputDirectory]),
       new HtmlWebpackPlugin({
         title: 'Online Code Editor',

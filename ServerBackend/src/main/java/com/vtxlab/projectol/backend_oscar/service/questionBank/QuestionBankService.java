@@ -5,7 +5,7 @@ import com.vtxlab.projectol.backend_oscar.payload.response.question.QuestionResp
 
 public interface QuestionBankService {
 
-  String getTestComputeCase(Long questionId);
+  String getTestAnswer(Long questionId);
 
   String getMethodSignatures(Long questionId);
 

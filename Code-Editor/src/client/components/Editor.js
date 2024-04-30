@@ -1,19 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {Form, FormGroup, Col, Button, Grid} from 'react-bootstrap';
-import LangSelector from './controls/LangSelector';
-import CodeEditor from './controls/CodeEditor';
+import React from 'react';
+import { Button, Col, Form, FormGroup, Grid } from 'react-bootstrap';
+import CompilerApi from '../api/CompilerApi';
+import { addUserScores } from "../api/UserScoresApi";
 import AlertDismissable from './controls/AlertDismissable';
+import CodeEditor from './controls/CodeEditor';
+import LangSelector from './controls/LangSelector';
 import OutputBox from './controls/OutputBox';
 import StatusImage from './controls/StatusImage';
-import CompilerApi from '../api/CompilerApi';
-import {putUserTestCase} from "../api/UserTestCaseApi";
-import {addUserScores, createUserScores, getUserScores, putUserScores, updateUserScores} from "../api/UserScoresApi";
-import {createUserQuestionSubmit, getUserQuestionSubmit, putUserQuestionSubmit} from "../api/UserQuestionSubmit";
-import {
-    addEventGroupUserQuestionHandle,
-    getEventGroupUserQuestionHandle,
-    putEventGroupUserQuestionHandle
-} from "../api/GroupQuestionHandleApi";
 
 let languages = ['Java', 'Python', 'JavaScript', 'C', 'C++'];
 const languagesProd = ['JavaScript', 'Python'];
@@ -25,7 +18,7 @@ const selectedEventId = sessionStorage.getItem('selectedEventId');
 class Editor extends React.Component {
     constructor(props) {
         super(props);
-        const {question} = this.props;
+        const { question } = this.props;
 
         console.log(`env: ${process.env.NODE_ENV}`);
         if (process.env.NODE_ENV === 'production') {
@@ -44,7 +37,7 @@ class Editor extends React.Component {
             },
             executionTime: 0,
             output: '',
-            submitTime:3,
+            submitTime: 3,
         };
 
         this.handleRun = this.handleRun.bind(this);
@@ -60,35 +53,36 @@ class Editor extends React.Component {
     }
 
     componentDidMount() {
-        CompilerApi.getTask('java', this.props.question.questionId) //default load java file
+        console.log('componentDidMount : ' + this.props.question.id)
+        CompilerApi.getTask('java', this.props.question.id) //default load java file
             //  .then(res => res.json())
             .then((task) => {
                 console.log(task);
-                this.setState({task});
+                this.setState({ task });
             });
     }
 
     handleCodeChange(code) {
-        const {task} = this.state;
+        const { task } = this.state;
         task.code = code;
         console.log(code);
-        return this.setState({task});
+        return this.setState({ task });
     }
 
     handleRun(event) {
         event.preventDefault();
-        const {task} = this.state;
+        const { task } = this.state;
         const startTime = new Date().getTime();
         console.log('handleRun code: ' + task.code);
         console.log('handleRun lang: ' + task.lang);
         console.log('handleRun this.state.output: ' + this.state.output);
 
-        CompilerApi.run(task,this.props.question.questionId)
+        CompilerApi.run(task, this.props.question.id)
             .then((res) => {
                 // Append the new test case result to the existing message
                 const endTime = new Date().getTime();
                 const executionTime = endTime - startTime;
-                this.setState({response: res, executionTime});
+                this.setState({ response: res, executionTime });
 
             })
             .catch((error) => {
@@ -98,7 +92,7 @@ class Editor extends React.Component {
 
     handleSubmit = async (event) => {
         event.preventDefault();
-        const {task} = this.state;
+        const { task } = this.state;
         const startTime = new Date().getTime();
         console.log('handleRun code: ' + task.code);
         console.log('handleRun lang: ' + task.lang);
@@ -114,7 +108,7 @@ class Editor extends React.Component {
             // Append the new test case result to the existing message
             const endTime = new Date().getTime();
             const executionTime = endTime - startTime;
-            this.setState({response: res, executionTime});
+            this.setState({ response: res, executionTime });
 
             console.log(this.props.question.questionId)
 
@@ -130,17 +124,17 @@ class Editor extends React.Component {
                 submitTime: new Date()
             }
 
-            if(sessionStorage.getItem('eventStatus') != 'O'){
+            if (sessionStorage.getItem('eventStatus') != 'O') {
                 alert("You can not submit")
             } else {
-                    // Call the external putUserTestCase function
-                    // await createUserScores(loginUser.accessToken, userScoreData);
-                    await addUserScores(loginUser.accessToken, userScoreData, userQuestionData);
-                    // await this.handleUserQuestionSubmit(userQuestionData);
+                // Call the external putUserTestCase function
+                // await createUserScores(loginUser.accessToken, userScoreData);
+                await addUserScores(loginUser.accessToken, userScoreData, userQuestionData);
+                // await this.handleUserQuestionSubmit(userQuestionData);
 
-                    let {submitTime} = this.state;
-                    submitTime = submitTime - 1;
-                    this.setState({submitTime});
+                let { submitTime } = this.state;
+                submitTime = submitTime - 1;
+                this.setState({ submitTime });
             }
 
             // Continue with any other logic you want to execute after submitting the test case
@@ -262,20 +256,20 @@ class Editor extends React.Component {
         // event.preventDefault();
         console.log(this.state.task);
         const field = event.target.name;
-        const {task} = this.state;
+        const { task } = this.state;
         task[field] = event.target.value;
-        return this.setState({task});
+        return this.setState({ task });
     }
 
     handleLangChange(event) {
         const index = parseInt(event.target.value, 10);
         CompilerApi.getTask(languages[index]).then((task) => {
             console.log(task);
-            this.setState({task});
+            this.setState({ task });
         });
-        const response = {status: '0', message: ''};
-        this.setState({response});
-        return this.setState({selectedLang: index});
+        const response = { status: '0', message: '' };
+        this.setState({ response });
+        return this.setState({ selectedLang: index });
     }
 
 
@@ -307,18 +301,18 @@ class Editor extends React.Component {
                     <FormGroup>
                         <Col sm={5}>
                             <Grid className="col-md-6">
-                                <Button bsStyle="primary" type="button" style={{fontSize: '15px'}}
-                                        onClick={this.handleRun}>
+                                <Button bsStyle="primary" type="button" style={{ fontSize: '15px' }}
+                                    onClick={this.handleRun}>
                                     Run Code
                                 </Button>
                             </Grid>
                             <Grid className="col-md-6">
                                 {this.state.submitTime === 0 ? (
-                                    <Button bsStyle="success" type="button" style={{fontSize: '15px'}} onClick={this.handleSubmit} disabled>
+                                    <Button bsStyle="success" type="button" style={{ fontSize: '15px' }} onClick={this.handleSubmit} disabled>
                                         Submit Code {this.state.submitTime}/3
                                     </Button>
                                 ) : (
-                                    <Button bsStyle="success" type="button" style={{fontSize: '15px'}} onClick={this.handleSubmit}>
+                                    <Button bsStyle="success" type="button" style={{ fontSize: '15px' }} onClick={this.handleSubmit}>
                                         Submit Code {this.state.submitTime}/3
                                     </Button>
                                 )}
@@ -331,7 +325,7 @@ class Editor extends React.Component {
                                 <div>Run Time: {this.state.executionTime}</div>
                             </Grid>
                         </Col>
-                        <Col sm={10}/>
+                        <Col sm={10} />
                     </FormGroup>
                     <FormGroup>
                         <Col sm={12}>

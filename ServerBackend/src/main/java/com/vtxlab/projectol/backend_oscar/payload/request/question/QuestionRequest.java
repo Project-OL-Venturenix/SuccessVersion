@@ -18,7 +18,7 @@ public class QuestionRequest {
   private String question;
 
   // @Nonnull
-  private String testComputeCase;
+  private String testAnswer;
 
   // @Nonnull
   private String methodSignatures;

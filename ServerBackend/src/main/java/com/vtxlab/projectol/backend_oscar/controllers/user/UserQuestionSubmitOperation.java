@@ -16,7 +16,7 @@ public interface UserQuestionSubmitOperation {
 
   @PostMapping("/userquestionsubmits/add")
   ResponseEntity<?> addUserQuestionSubmit(
-    @Valid @RequestBody  UserQuestionSubmitRequest userquestionsubmitRequest);
+    @Valid @RequestBody  UserQuestionSubmitRequest userQuestionSubmitRequest);
 
   @GetMapping("/userquestionsubmits")
   ResponseEntity<List<UserScore>> getAllUserQuestionSubmits();
@@ -28,7 +28,7 @@ public interface UserQuestionSubmitOperation {
   @PutMapping("/userquestionsubmits/{id}")
   ResponseEntity<UserScore> updateUserQuestionSubmit(
       @PathVariable long id,
-      @RequestBody UserScore userquestionsubmit);
+      @RequestBody UserScore userQuestionSubmit);
 
   @DeleteMapping("/userquestionsubmits/{id}")
   ResponseEntity<?> deleteUserQuestionSubmit(@PathVariable long id);

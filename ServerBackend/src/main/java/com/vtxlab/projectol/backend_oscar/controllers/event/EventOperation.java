@@ -25,6 +25,11 @@ public interface EventOperation {
       @GetMapping("/events/{id}")
       ResponseEntity<EventDTO> getEventById(@PathVariable("id") long id);
 
+      @PutMapping("/events/{id}")
+      @ResponseStatus(HttpStatus.RESET_CONTENT)
+      ResponseEntity<EventDTO> updateEventById(@PathVariable("id") long id,
+                  @RequestBody EventDTO eventRequest);
+
       @PutMapping("/events/{id}/{status}")
       @ResponseStatus(HttpStatus.CREATED)
       Event updateEvent(@PathVariable("id") long id,

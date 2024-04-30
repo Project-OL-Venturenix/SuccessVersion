@@ -34,4 +34,9 @@ public class EventServiceImpl implements EventService {
     eventRepository.deleteById(id);
   }
 
+  @Override
+  public Event updateEvent( Event event) {
+    return eventRepository.saveAndFlush(event);
+  }
+
 }

@@ -15,7 +15,6 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,7 +25,7 @@ import lombok.Setter;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@EqualsAndHashCode
+// @EqualsAndHashCode
 @Table(name = "testcases")
 public class TestCase implements Serializable {
         @Id
@@ -39,7 +38,7 @@ public class TestCase implements Serializable {
         @JoinColumn(name = "question_id")
         @JsonProperty("question_id")
         private QuestionBank questionBank;
-
+        
         @Nonnull
         private String expectedOutput;
 

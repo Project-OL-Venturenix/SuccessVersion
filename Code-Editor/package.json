@@ -16,10 +16,6 @@
     "prod": "concurrently \"npm run server\" \"npm run client-prod\"",
     "start-prod": "PORT=9010 node src/server/index.js"
   },
-  "author": {
-    "name": "Rong Zhuang",
-    "email": "jojozhuang@gmail.com"
-  },
   "license": "MIT",
   "dependencies": {
     "@fortawesome/free-solid-svg-icons": "^6.5.1",
@@ -31,10 +27,10 @@
     "file-loader": "6.2.0",
     "mkdirp": "0.5.6",
     "prop-types": "15.8.1",
-    "react": "16.14.0",
+    "react": "^17.0.2",
     "react-ace": "10.1.0",
     "react-bootstrap": "0.33.1",
-    "react-dom": "16.14.0",
+    "react-dom": "^17.0.2",
     "react-markdown": "^9.0.1",
     "react-router-dom": "4.3.1",
     "recharts": "^2.12.0",

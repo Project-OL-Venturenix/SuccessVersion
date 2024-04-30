@@ -1,17 +1,14 @@
 package com.vtxlab.projectol.backend_oscar.payload.response.question;
 
-import java.util.List;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class TestCaseScoreResponse {
   private String token;
   private String type = "Bearer";
   private Long id; 
   
-  private String testcasescoredesc;
-  private Double testcasescore;
+  private String testCaseScoreDesc;
+  private Double testCaseScore;
   private String status;
   
   private LocalDateTime createdDate;
@@ -26,11 +23,11 @@ public class TestCaseScoreResponse {
   private Integer updatedBy;
   
   
-  public TestCaseScoreResponse(String accessToken, Long id, String testcasescoredesc, Double testcasescore,  String status, LocalDateTime createdDate, Integer createdBy, LocalDateTime updatedDate, Integer updatedBy) {
+  public TestCaseScoreResponse(String accessToken, Long id, String testCaseScoreDesc, Double testCaseScore,  String status, LocalDateTime createdDate, Integer createdBy, LocalDateTime updatedDate, Integer updatedBy) {
     this.token = accessToken;
     this.id = id;
-    this.testcasescoredesc = testcasescoredesc;
-    this.testcasescore = testcasescore;
+    this.testCaseScoreDesc = testCaseScoreDesc;
+    this.testCaseScore = testCaseScore;
     this.status = status;
     this.createdDate = createdDate;
     this.createdBy = createdBy;
@@ -64,19 +61,19 @@ public class TestCaseScoreResponse {
   }
 
   public String getTestcasescoredesc() {
-    return testcasescoredesc;
+    return testCaseScoreDesc;
   }
 
-  public void setTestcasescoredesc(String testcasescoredesc) {
-    this.testcasescoredesc = testcasescoredesc;
+  public void setTestcasescoredesc(String testCaseScoreDesc) {
+    this.testCaseScoreDesc = testCaseScoreDesc;
   }
 
   public Double setTestcasescore() {
-    return testcasescore;
+    return testCaseScore;
   }
 
-  public void setTestcasescore(Double testcasescore) {
-    this.testcasescore = testcasescore;
+  public void setTestcasescore(Double testCaseScore) {
+    this.testCaseScore = testCaseScore;
   }
 
 

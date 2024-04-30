@@ -10,8 +10,22 @@
 #    docker run -e VIRTUAL_HOST=code-editor-web --name code-editor-web jojozhuang/code-editor-web
 
 # Stage 1, based on Node.js, to build and compile Angular
+# Docker
 
-FROM node:15.12.0-alpine as builder
+# Build for production. All the compiled html files and js files will be generated in dist.
+# npm run build
+
+# Create image with nginx for frontend.
+# docker build -t jojozhuang/code-editor-web .
+
+# Create image with node for backend.
+# docker build -t jojozhuang/code-editor-server . -f Dockerfile-server
+
+# Create container.
+# docker run --name code-editor-web -p 9010:80 -d jojozhuang/code-editor-web
+# docker run --name code-editor-server -p 9011:80 -d jojozhuang/code-editor-server
+
+FROM node:16.13.1-alpine as builder
 
 WORKDIR /react-app
 
@@ -19,7 +33,7 @@ COPY package*.json webpack*.js .babelrc ./
 COPY ./src/client ./src/client
 COPY ./public ./public
 
-RUN npm ci --quiet && npm run build
+RUN npm install --force && npm ci --quiet && npm run build
 
 # Stage 2, based on Nginx, to have only the compiled app, ready for production with Nginx
 

@@ -6,40 +6,31 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.vtxlab.projectol.backend_oscar.payload.response.question.TestCaseDTO;
-import com.vtxlab.projectol.backend_oscar.repository.questionBank.TestCaseRepository;
 import com.vtxlab.projectol.backend_oscar.service.questionBank.QuestionBankService;
 import com.vtxlab.projectol.backend_oscar.service.questionBank.TestCaseService;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class TestCaseServiceImpl implements TestCaseService {
 
   @Autowired
   private QuestionBankService questionBankService;
 
-  @Autowired
-  private TestCaseRepository testCaseRepository;
-
   public static final String CLASS_DECLARATION_TEMPLATE =
-      "import java.util.*;\nimport java.math.*;\n public class Question%s";
+      "import java.util.*;%nimport java.math.*;%n public class Question%s";
+
   public static final String CODE_TEMPLATE =
-      " \n //Enter the code Here.Your class should be named Question%s.\n \n ";
+      "// Enter the code Here.Your class should be named Question%s.%n";
+
   public static final String MAIN_METHOD_TEMPLATE =
-      "public static void main(String[] args) {\n" + //
-          "    int counter = 0;\n" + //
-          "    Question%s question%s = new Question%s();\n\n ";
+      "public static void main(String[] args) { int counter = 0;Question%s question%s = new Question%s();";
 
   public static final String COUNT_RUNTIME =
-      "        long startTime = System.nanoTime();\n" + //
-          "        System.out.println(\"Test Case Result: \" + counter + \" / 10\");\n"
-          + //
-          "        long endTime = System.nanoTime();\n" + //
-          "        long duration = (endTime - startTime) / 1000000; // Milliseconds\n"
-          + //
-          "        System.out.println(\n" + //
-          "                \"Time taken for Test Case 10: \" + duration + \" milliseconds\");\n";
+      "long startTime = System.nanoTime();System.out.println(\" Test Case Result: \" + counter + \" / 10\");"
+          + "long endTime = System.nanoTime();long duration = (endTime - startTime) / 1000000;"
+          + "System.out.println(\"Time taken for Test Case 10: \"  + duration + \" milliseconds\");";
 
-  // public static final String TEST_COMPUTE_CASE =
-  // "public int testComputeCase(Question%s question, int input1, int input2, int input3, int expectedOutput) {\n";
   public static String extractMethodName(String methodSignature) {
     // Define a regular expression pattern to match the method name
     String pattern = "\\s*(\\w+)\\s*\\(.*\\)"; // Matches "methodName(...)"
@@ -61,12 +52,14 @@ public class TestCaseServiceImpl implements TestCaseService {
   }
 
   @Override
-  public String generateTestComputeCase(List<TestCaseDTO> testCases,
+  public String generateTestAnswer(List<TestCaseDTO> testCases,
       Long questionId) {
     StringBuilder testCaseBuilder = new StringBuilder();
     testCases.forEach(e -> {
-      testCaseBuilder.append("public int testComputeCase(Question")
-          .append(questionId).append(" question, ").append(e.getInput1());
+      testCaseBuilder
+          .append(questionBankService.getMethodSignatures(questionId))//
+          .append(questionId).append(String.format(" question%s, ", questionId))
+          .append(e.getInput1());
 
       if (e.getInput2() != null) {
         testCaseBuilder.append(", ").append(e.getInput2());
@@ -76,61 +69,66 @@ public class TestCaseServiceImpl implements TestCaseService {
         testCaseBuilder.append(", ").append(e.getInput3());
       }
 
-      testCaseBuilder.append(", ").append(e.getExpectedOutput())
-          .append("); \n");
+      testCaseBuilder.append(", ").append(e.getExpectedOutput()).append("); ");
     });
 
-    testCaseBuilder.append(COUNT_RUNTIME)
-        .append(this.generateEndCodeBlock() + "\n");
-    testCaseBuilder.append(questionBankService.getTestComputeCase(questionId));
+    testCaseBuilder.append(COUNT_RUNTIME).append(this.generateEndCodeBlock());
+    testCaseBuilder.append(questionBankService.getTestAnswer(questionId));
     testCaseBuilder.append(this.generateEndCodeBlock());
 
     return testCaseBuilder.toString();
+  }
+
+  private String checkString(String input) {
+    if (input.indexOf("\"") == -1) {
+      return input;
+    } else {
+      return String.valueOf(input);
+    }
   }
 
   @Override
   public String generateTestCase(List<TestCaseDTO> testCases, Long questionId) {
     StringBuilder testCaseBuilder = new StringBuilder();
     testCases.stream().forEach(e -> {
-      testCaseBuilder.append("counter += testComputeCase(question")
-          .append(questionId).append(", ").append(e.getInput1());
+      testCaseBuilder
+          .append(String.format("counter += question%s.testAnswer(question%s",
+              questionId, questionId))
+          .append(", ").append(checkString(e.getInput1()));
+
       if (e.getInput2() != null) {
         if (e.getInput2().equals("0")) {
           // Append "0" if input2 is "0"
           testCaseBuilder.append(",").append(0);
         } else {
           testCaseBuilder.append(", ")//
-              .append(e.getInput2());
+              .append(checkString(e.getInput2()));
 
         }
-
-        // Append input3
-        if (e.getInput3() != null) {
-          if (e.getInput3().equals("0")) {
-            // Append "0" if input3 is "0"
-            testCaseBuilder.append(",").append(0);
-          } else {
-            testCaseBuilder.append(", ").append(e.getInput3());
-          }
-        }
-
-
-        // append expectedOutput
-        if (e.getExpectedOutput().equals("0")) {
+      }
+      // Append input3
+      if (e.getInput3() != null) {
+        if (e.getInput3().equals("0")) {
           // Append "0" if input3 is "0"
           testCaseBuilder.append(",").append(0);
         } else {
-          testCaseBuilder.append(", ").append(e.getExpectedOutput());
+          testCaseBuilder.append(", ").append(checkString(e.getInput3()));
         }
-        // testCaseBuilder.append(", ").append(getExpectedOutput())
-        // .append(");\n");
       }
-      testCaseBuilder.append("); \n");
+
+      if (e.getExpectedOutput().equals("0")) {
+        // Append "0" if input3 is "0"
+        testCaseBuilder.append(",").append(0);
+      } else {
+        testCaseBuilder.append(", ").append(checkString(e.getExpectedOutput()));
+      }
+      log.info("expected Output" + e.getExpectedOutput());
+      testCaseBuilder.append(");");
+
     });
 
-    testCaseBuilder.append(COUNT_RUNTIME)
-        .append(this.generateEndCodeBlock() + "\n");
-    testCaseBuilder.append(questionBankService.getTestComputeCase(questionId));
+    testCaseBuilder.append(COUNT_RUNTIME).append(this.generateEndCodeBlock());
+    testCaseBuilder.append(questionBankService.getTestAnswer(questionId));
     testCaseBuilder.append(this.generateEndCodeBlock());
     return testCaseBuilder.toString();
   }
@@ -149,8 +147,8 @@ public class TestCaseServiceImpl implements TestCaseService {
     return String.format(questionBankService.getMethodSignatures(questionId) + //
         this.generateOpenCodeBlock() + //
         CODE_TEMPLATE + //
-        this.generateEndCodeBlock() + //
-        "\n" + this.generateEndCodeBlock(), questionId);
+        this.generateEndCodeBlock() + "%n " + //
+        this.generateEndCodeBlock(), questionId);
   }
 
   @Override
@@ -160,13 +158,13 @@ public class TestCaseServiceImpl implements TestCaseService {
         questionId, //
         questionId//
     )) //
-        .append("\n");//
+    ;//
 
     return mainMethodCode.toString();
   }
 
   public String generateOpenCodeBlock() {
-    return "{";
+    return "{%n";
   }
 
   public String generateEndCodeBlock() {

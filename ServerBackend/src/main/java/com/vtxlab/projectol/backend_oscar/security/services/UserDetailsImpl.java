@@ -86,8 +86,8 @@ public class UserDetailsImpl implements UserDetails {
       String mobile, String email, String userName, String password,
       String company, String title, Integer py_experience,
       Integer jv_experience, Integer js_experience, Integer cs_experience,
-      Integer sa_experience, String status, LocalDateTime createdate,
-      Integer createby, LocalDateTime updatedate, Integer updateby,
+      Integer sa_experience, String status, LocalDateTime createdDate,
+      Integer createdBy, LocalDateTime updatedDate, Integer updatedBy,
       Collection<? extends GrantedAuthority> authorities) {
     this.id = id;
     this.firstName = firstName;

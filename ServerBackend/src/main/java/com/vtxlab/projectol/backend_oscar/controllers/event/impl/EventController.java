@@ -1,6 +1,8 @@
 package com.vtxlab.projectol.backend_oscar.controllers.event.impl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -27,12 +29,34 @@ public class EventController implements EventOperation {
   EventService eventService;
 
   public ResponseEntity<?> addEvent(EventRequest eventRequest) {
+    String startTime = eventRequest.getTargetStartTime();
+    String endTime = eventRequest.getTargetEndTime();
+    LocalDate eventDay = eventRequest.getEventDate();
+
+    LocalDateTime targetStartTime;
+    LocalDateTime targetEndTime;
+
+    if (startTime.length() == 4 && endTime.length() == 4) {
+      int startHours = Integer.parseInt(startTime.substring(0, 2));
+      int startMinutes = Integer.parseInt(startTime.substring(2));
+      targetStartTime =
+          LocalDateTime.of(eventDay, LocalTime.of(startHours, startMinutes));
+      int endHours = Integer.parseInt(endTime.substring(0, 2));
+      int endMinutes = Integer.parseInt(endTime.substring(2));
+      targetEndTime =
+          LocalDateTime.of(eventDay, LocalTime.of(endHours, endMinutes));
+    } else {
+      // Handle invalid input
+      throw new IllegalArgumentException(
+          "Invalid input format. Please provide time in HHMM format.");
+    }
+
     Event builder = Event.builder()//
         .name(eventRequest.getName())//
         .status("O")//
-        .eventDate(eventRequest.getEventDate())
-        .targetStartTime(eventRequest.getTargetStartTime())//
-        .targetEndTime(eventRequest.getTargetEndTime())//
+        .eventDate(eventRequest.getEventDate())//
+        .targetStartTime(targetStartTime)//
+        .targetEndTime(targetEndTime)//
         .createdDate(LocalDateTime.now())//
         .createdBy(eventRequest.getCreatedBy())//
         .updatedDate(LocalDateTime.now())//
@@ -99,5 +123,24 @@ public class EventController implements EventOperation {
 
   private boolean isValidStatus(String status) {
     return status.equalsIgnoreCase("Open") || status.equalsIgnoreCase("Close");
+  }
+
+  @Override
+  public ResponseEntity<EventDTO> updateEventById(long id,
+      EventDTO eventRequest) {
+    Event builder = Event.builder()//
+        .name(eventRequest.getName())//
+        .status("O")//
+        .eventDate(eventRequest.getEventDate())//
+        .targetStartTime(eventRequest.getTargetStartTime())//
+        .targetEndTime(eventRequest.getTargetEndTime())//
+        .createdDate(LocalDateTime.now())//
+        .createdBy(eventRequest.getCreatedBy())//
+        .updatedDate(LocalDateTime.now())//
+        .updatedBy(eventRequest.getUpdatedBy())//
+        .build();
+
+    eventService.updateEvent(builder);
+    return ResponseEntity.ok(Mapper.map(builder));
   }
 }

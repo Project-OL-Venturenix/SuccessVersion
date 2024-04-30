@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 public class TestCaseDTO {
   private Long id;
   private String methodSignatures;
-  private String testComputeCase;
+  private String testAnswer;
   private String input1;
   private String input2;
   private String input3;

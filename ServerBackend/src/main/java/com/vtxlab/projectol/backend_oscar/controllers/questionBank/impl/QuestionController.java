@@ -77,7 +77,7 @@ public class QuestionController implements QuestionOperation {
   public ResponseEntity<?> addQuestion(QuestionRequest questionRequest) {
     QuestionBank question = QuestionBank.builder()//
         .question(questionRequest.getQuestion())//
-        .testComputeCase(questionRequest.getTestComputeCase())//
+        .testAnswer(questionRequest.getTestAnswer())//
         .methodSignatures(questionRequest.getMethodSignatures())//
         .bonusRuntime(questionRequest.getBonusRuntime())//
         .createdDate(java.time.LocalDateTime.now())//
@@ -148,14 +148,9 @@ public class QuestionController implements QuestionOperation {
     Long questionId = Long.parseLong(id);
     Optional<QuestionBank> questionData =
         questionRepository.findById(questionId);
-    log.info("questionData : ");
 
-    // Optional<TestCase> testcaseData = testCaseRepository.findAll().stream()//
-    // .filter(e -> e.getQuestionBank().getQuestionId().equals(questionId))//
-    // .findFirst();
     Optional<List<TestCase>> testcaseData =
         Optional.of(testCaseRepository.getTestCaseByQuestionId(questionId));
-    log.info("testcaseData : " + testcaseData.orElse(null));
 
     List<TestCaseDTO> testCases = testCaseRepository.findAll().stream()//
         .filter(e -> e.getQuestionBank().getQuestionId().equals(questionId))//
@@ -193,17 +188,10 @@ public class QuestionController implements QuestionOperation {
         questionRepository.findById(questionId);
 
     if (questionData.isPresent()) {
-      QuestionBank builder = QuestionBank.builder()//
-          .question(question.getQuestion())//
-          .testComputeCase(question.getTestComputeCase())//
-          .methodSignatures(question.getMethodSignatures())//
-          .createdDate(question.getCreatedDate())//
-          .createdBy(question.getCreatedBy())//
-          .updatedDate(LocalDateTime.now())//
-          .updatedBy(question.getUpdatedBy())//
-          .build();
-
-      return new ResponseEntity<>(questionRepository.save(builder),
+      questionData.get().setQuestion(question.getQuestion()); //
+      questionData.get().setTestAnswer(question.getTestAnswer()); //
+      questionData.get().setMethodSignatures(question.getMethodSignatures()); //
+      return new ResponseEntity<>(questionRepository.save(questionData.get()),
           HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -248,10 +236,9 @@ public class QuestionController implements QuestionOperation {
 
   @Override
   public ResponseEntity<Set<QuestionBankDTO>> getQuestionByEventId(
-      String eventid) {
-    Long eventId = Long.valueOf(eventid);
+      String eventId) {
     Set<QuestionBankDTO> result =
-        questionRepository.findByEventsId(eventId).stream()//
+        questionRepository.findByEventsId(Long.valueOf(eventId)).stream()//
             .map(e -> Mapper.map(e))//
             .collect(Collectors.toSet());
     return new ResponseEntity<>(result, HttpStatus.OK);
@@ -262,7 +249,7 @@ public class QuestionController implements QuestionOperation {
     Long questionId = Long.parseLong(id);
     Optional<QuestionBank> questionData =
         questionRepository.findById(questionId);
-    log.info("questionData : ");
+    log.info("questionData : " + questionData.orElse(null));
 
     // Optional<TestCase> testcaseData = testCaseRepository.findAll().stream()//
     // .filter(e -> e.getQuestionBank().getQuestionId().equals(questionId))//
@@ -284,9 +271,6 @@ public class QuestionController implements QuestionOperation {
           .classDeclaration(
               testCaseService.generateClassDeclaration(questionId))//
           .code(testCaseService.generateFullCode(questionId))//
-          // .mainMethod(testcaseData.get().generateMainMethod()
-          // + testcaseData.get().getMainMethod() + "\n"
-          // + testcaseData.get().generateEndCodeBlock())//
           .mainMethod(testCaseService.generateMainMethod(questionId) + //
               testCaseService.generateTestCase(testCases, questionId))//
           .createdBy(questionData.get().getCreatedBy())//

@@ -1,8 +1,6 @@
 package com.vtxlab.projectol.backend_oscar.payload.response.user;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vtxlab.projectol.backend_oscar.entity.user.Role;
 import com.vtxlab.projectol.backend_oscar.payload.response.event.EventDTO;

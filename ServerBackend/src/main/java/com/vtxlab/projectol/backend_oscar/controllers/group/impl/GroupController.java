@@ -34,9 +34,7 @@ import com.vtxlab.projectol.backend_oscar.repository.user.UserQuestionSubmission
 import com.vtxlab.projectol.backend_oscar.repository.user.UserRepository;
 import com.vtxlab.projectol.backend_oscar.security.jwt.JwtUtils;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.extern.slf4j.Slf4j;
 
-@Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/api")
@@ -66,22 +64,6 @@ public class GroupController implements GroupOperation {
   @Autowired
   UserQuestionSubmissionRepository userscoreRepository;
 
-  // public ResponseEntity<?> addGroup(
-  // @Valid @RequestBody GroupRequest groupRequest) {
-  // Group builder = Group.builder()//
-  // .name(groupRequest.getName())//
-  // .status(groupRequest.getStatus())//
-  // .createdBy(groupRequest.getCreatedBy())//
-  // .createdDate(LocalDateTime.now())//
-  // .updatedBy(groupRequest.getUpdatedBy())//
-  // .updatedDate(LocalDateTime.now())//
-  // .build();
-
-  // groupRepository.save(builder);
-  // return ResponseEntity.ok(new MessageResponse("Add Group successfully!"));
-
-  // }
-
   @Override
   public ResponseEntity<List<GroupDTO>> getAllGroups() {
     try {
@@ -99,8 +81,6 @@ public class GroupController implements GroupOperation {
     }
 
   }
-
-
 
   @Override
   public ResponseEntity<Group> updateGroup(long id, Group group) {

@@ -29,7 +29,7 @@ public class Mapper {
     return QuestionBankDTO.builder()//
         .questionId(questionBank.getQuestionId())//
         .question(questionBank.getQuestion())//
-        .testComputeCase(questionBank.getTestComputeCase())//
+        .testAnswer(questionBank.getTestAnswer())//
         .methodSignatures(questionBank.getMethodSignatures())//
         .bonusRuntime(questionBank.getBonusRuntime())//
         .createdBy(questionBank.getCreatedBy())//
@@ -72,7 +72,7 @@ public class Mapper {
     return UserScoreDTO.builder()//
         .id(userScore.getId())//
         .submitTime(userScore.getSubmitTime())//
-        .resultOfPassingTestecase(userScore.getResultOfPassingTestecase())//
+        .resultOfPassingTestCase(userScore.getResultOfPassingTestecase())//
         .bonusUnder30Mins(userScore.getBonusUnder30Mins())//
         .bonusWithinQuestionRuntime(userScore.getBonusWithinQuestionRuntime())//
         .runtimeByMsec(userScore.getRuntimebyMsec())//

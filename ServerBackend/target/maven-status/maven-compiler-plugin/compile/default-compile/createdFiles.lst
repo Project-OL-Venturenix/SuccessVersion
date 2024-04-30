@@ -62,6 +62,7 @@ com/vtxlab/projectol/backend_oscar/service/questionBank/TestCaseService.class
 com/vtxlab/projectol/backend_oscar/payload/response/user/UserScoreResult.class
 com/vtxlab/projectol/backend_oscar/payload/request/user/SignupRequest.class
 com/vtxlab/projectol/backend_oscar/payload/response/user/GroupScoreDTO.class
+com/vtxlab/projectol/backend_oscar/payload/response/user/UserResponse$UserResponseBuilder.class
 com/vtxlab/projectol/backend_oscar/payload/request/question/SubmitTimeRunTimeDTO$SubmitTimeRunTimeDTOBuilder.class
 com/vtxlab/projectol/backend_oscar/exception/InvalidUserIdInputException.class
 com/vtxlab/projectol/backend_oscar/payload/response/question/TestCaseResponse.class
@@ -126,7 +127,6 @@ com/vtxlab/projectol/backend_oscar/repository/user/RoleRepository.class
 com/vtxlab/projectol/backend_oscar/exception/InvalidEventIdInputException.class
 com/vtxlab/projectol/backend_oscar/repository/questionBank/TestCaseRepository.class
 com/vtxlab/projectol/backend_oscar/payload/response/group/GroupUserDTO$GroupUserDTOBuilder.class
-com/vtxlab/projectol/backend_oscar/payload/response/user/UserTestCaseResponse.class
 com/vtxlab/projectol/backend_oscar/service/user/UserScoreService.class
 com/vtxlab/projectol/backend_oscar/exception/exceptionEnum/Syscode.class
 com/vtxlab/projectol/backend_oscar/exception/ApiResp.class

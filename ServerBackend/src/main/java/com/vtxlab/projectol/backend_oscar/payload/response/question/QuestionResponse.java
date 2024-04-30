@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 import java.time.LocalDateTime;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 
 @Builder
 @Getter
@@ -15,6 +16,8 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@JsonPropertyOrder({"id", "classDeclaration", "code", "mainMethod",
+    "createdDate", "createdBy", "updatedDate", "updatedBy"})
 public class QuestionResponse {
   private final String TYE = "Bearer";
 

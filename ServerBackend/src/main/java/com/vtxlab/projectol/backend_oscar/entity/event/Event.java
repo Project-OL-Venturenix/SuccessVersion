@@ -8,6 +8,7 @@ import com.vtxlab.projectol.backend_oscar.entity.questionBank.QuestionBank;
 import com.vtxlab.projectol.backend_oscar.entity.user.UserScore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -19,7 +20,6 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,7 +32,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+// @EqualsAndHashCode
 @Table(name = "events")
 public class Event {
   @Id
@@ -62,10 +62,10 @@ public class Event {
   // @Size(min = 1, max = 20)
   private Integer updatedBy;
 
-  @OneToMany(mappedBy = "event")
+  @OneToMany(mappedBy = "event",fetch = FetchType.EAGER)
   private Set<UserScore> userScores = new HashSet<>();
 
-  @ManyToMany
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "event_question",
       joinColumns = @JoinColumn(name = "event_id"),
       inverseJoinColumns = @JoinColumn(name = "question_id"))
