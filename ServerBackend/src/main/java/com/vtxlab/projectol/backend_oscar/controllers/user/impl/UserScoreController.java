@@ -37,8 +37,8 @@ public class UserScoreController implements UserScoreOperation {
   @Autowired
   private UserScoreService userScoreService;
 
-  public ResponseEntity<?> addUserScore(UserScoreRequest userscoreRequest) {
-    if (!userScoreService.addUserScore(userscoreRequest))
+  public ResponseEntity<?> addUserScore(UserScoreRequest userScoreRequest) {
+    if (!userScoreService.addUserScore(userScoreRequest))
       return ResponseEntity.badRequest()
           .body(new MessageResponse("Fail Add User Score"));
     return ResponseEntity
@@ -48,12 +48,12 @@ public class UserScoreController implements UserScoreOperation {
 
   public ResponseEntity<List<UserScoreDTO>> getAllUserScores() {
     try {
-      List<UserScoreDTO> userscores = userScoreService.getAllUserScores()
+      List<UserScoreDTO> userScores = userScoreService.getAllUserScores()
           .stream().map(e -> Mapper.map(e)).collect(Collectors.toList());
-      if (userscores.isEmpty()) {
+      if (userScores.isEmpty()) {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
       }
-      return new ResponseEntity<>(userscores, HttpStatus.OK);
+      return new ResponseEntity<>(userScores, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 
@@ -63,8 +63,8 @@ public class UserScoreController implements UserScoreOperation {
 
   public ResponseEntity<UserScoreDTO> getUserScoreById(String id) {
     Long userId = Long.valueOf(id);
-    UserScore userscoreData = userScoreService.getUserScoreById(userId);
-    return new ResponseEntity<>(Mapper.map(userscoreData), HttpStatus.OK);
+    UserScore userScoreData = userScoreService.getUserScoreById(userId);
+    return new ResponseEntity<>(Mapper.map(userScoreData), HttpStatus.OK);
   }
 
 
@@ -81,23 +81,21 @@ public class UserScoreController implements UserScoreOperation {
   }
 
   @Override
-  public boolean addScore(String eventid, String userid, String questionid,
+  public boolean addScore(String eventId, String userID, String questionID,
       String testcasePassTotal, SubmitTimeRunTimeDTO submitTimeRunTimeDTO) {
-    Long eventID = Long.valueOf(eventid);
-    Long userID = Long.valueOf(userid);
-    Long questionID = Long.valueOf(questionid);
     Integer testcasePass = Integer.valueOf(testcasePassTotal);
 
-    return userScoreService.addScore(eventID, userID, questionID, testcasePass,
-        submitTimeRunTimeDTO);
+    return userScoreService.addScore(Long.valueOf(eventId), //
+        Long.valueOf(userID), //
+        Long.valueOf(questionID), //
+        testcasePass, submitTimeRunTimeDTO);
   }
 
   @Override
   public ResponseEntity<UserScoreResult> getUserTestCaseByEventId(
-      String eventid) {
-    Long eventId = Long.valueOf(eventid);
+      String eventId) {
     UserScoreResult userScoreDTO =
-        userScoreService.getUserTestCaseByEventId(eventId);
+        userScoreService.getUserTestCaseByEventId(Long.valueOf(eventId));
     return ResponseEntity.ok(userScoreDTO);
   }
 }

@@ -6,21 +6,50 @@ import {
     List,
     SimpleForm,
     TextField,
-    TextInput
+    TextInput,
+    Button
 } from "react-admin";
+import React from 'react';
+import BASE_URL from './BaseUrl';
 
-export const QuestionList = () => (
-    <List>
-        <Datagrid>
-            <TextField source="id" />
-            <TextField source="question" />
-            <TextField source="testAnswer" />
-            <TextField source="methodSignatures" />
-            <TextField source="targetCompleteTime" />
-            <EditButton />
-        </Datagrid>
-    </List>
-);
+const getQuestionID = () => {
+    const question = localStorage.getItem('question');
+    return question ? JSON.parse(question).id : null;
+};
+
+export const QuestionList = () => {
+
+    function handleAddQuestion(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, questionId: string): void {
+        const eventId = prompt("Enter Event ID:") || ""; // prompt user for event ID
+        const apiUrl = `${BASE_URL}/api/addEventQuestion/event/${eventId}/question/${questionId}`;
+
+        fetch(apiUrl)
+            .then(response => {
+                // handle response
+                console.log(response);
+            })
+            .catch(error => {
+                // handle error
+                console.log(error);
+
+            });
+    }
+
+    return (
+        <List>
+            <Datagrid>
+                <TextField source="id" />
+                <TextField source="question" />
+                <TextField source="testAnswer" />
+                <TextField source="methodSignatures" />
+                <TextField source="targetCompleteTime" />
+                <EditButton />
+                <Button label="Add Question To Event" onClick={(event) => handleAddQuestion(event, getQuestionID())} />
+
+            </Datagrid>
+        </List>
+    );
+};
 
 export const QuestionEdit = () => (
     <Edit>

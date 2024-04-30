@@ -172,7 +172,7 @@ public class UserScoreServiceImpl implements UserScoreService {
       // submit time
       LocalDateTime submitTime = userScore.getSubmitTime();
       userResult.getSubmitTime().put(questionKey, submitTime);
-      // rutime
+      // runtime
       String runtime = String.valueOf(userScore.getRuntimebyMsec());
       userResult.getRuntime().put(questionKey, runtime);
 

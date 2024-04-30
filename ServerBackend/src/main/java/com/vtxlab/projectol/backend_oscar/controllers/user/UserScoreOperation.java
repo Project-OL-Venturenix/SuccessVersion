@@ -25,7 +25,7 @@ public interface UserScoreOperation {
 
     @PostMapping("/userscores")
     ResponseEntity<?> addUserScore(
-            @Valid @RequestBody UserScoreRequest userscoreRequest);
+            @Valid @RequestBody UserScoreRequest userScoreRequest);
 
     @GetMapping("/userscores")
     ResponseEntity<List<UserScoreDTO>> getAllUserScores();
@@ -36,7 +36,7 @@ public interface UserScoreOperation {
     @DeleteMapping("/userscores/{id}")
     ResponseEntity<?> deleteUserScore(@PathVariable String id);
 
-    @GetMapping("/usertestcases/eventid/{eventId}")
+    @GetMapping("/usertestcases/eventId/{eventId}")
     ResponseEntity<UserScoreResult> getUserTestCaseByEventId(
             @PathVariable String eventId);
 }
