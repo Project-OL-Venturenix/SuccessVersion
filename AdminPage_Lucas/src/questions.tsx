@@ -23,7 +23,16 @@ export const QuestionList = () => {
         const eventId = prompt("Enter Event ID:") || ""; // prompt user for event ID
         const apiUrl = `${BASE_URL}/api/addEventQuestion/event/${eventId}/question/${questionId}`;
 
-        fetch(apiUrl)
+        fetch(apiUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                questionId: questionId,
+                eventId: eventId,
+            }),
+        })
             .then(response => {
                 // handle response
                 console.log(response);
@@ -31,7 +40,6 @@ export const QuestionList = () => {
             .catch(error => {
                 // handle error
                 console.log(error);
-
             });
     }
 

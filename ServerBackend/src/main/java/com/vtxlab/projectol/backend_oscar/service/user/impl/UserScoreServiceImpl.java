@@ -50,34 +50,38 @@ public class UserScoreServiceImpl implements UserScoreService {
 
 
   @Override
-  public boolean addScore(Long eventid, Long userid, Long questionid,
-                          Integer testcasePass, SubmitTimeRunTimeDTO submitTimeRunTimeDTO) {
+  public boolean addScore(Long eventId, Long userId, Long questionId,
+      Integer testcasePass, SubmitTimeRunTimeDTO submitTimeRunTimeDTO) {
     Optional<UserScore> builder = userscoreRepository
-            .findByEventIdAndUserIdAndQuestionId(eventid, userid, questionid);
+        .findByEventIdAndUserIdAndQuestionId(eventId, userId, questionId);
     if (!builder.isPresent()) {
-      Optional<Event> event = eventRepository.findById(eventid);
-      Optional<User> user = userRepository.findById(userid);
-      Optional<QuestionBank> question = questionRepository.findById(questionid);
+      Optional<Event> event = eventRepository.findById(eventId);
+      Optional<User> user = userRepository.findById(userId);
+      Optional<QuestionBank> question = questionRepository.findById(questionId);
 
       if (event.isPresent() && user.isPresent() && question.isPresent()) {
         LocalDateTime submissionTime = LocalDateTime.now();
         LocalDateTime targetStartTime = event.get().getTargetStartTime();
 
-        long minutesDifference = Duration.between(targetStartTime, submissionTime).toMinutes();
+        long minutesDifference =
+            Duration.between(targetStartTime, submissionTime).toMinutes();
 
-        boolean isWithin30Minutes = minutesDifference >= 0 && minutesDifference < 30;
+        boolean isWithin30Minutes =
+            minutesDifference >= 0 && minutesDifference < 30;
 
-        userscoreRepository.saveAndFlush(UserScore.builder().event(event.get())
-                .user(user.get()).question(question.get())
-                .resultOfPassingTestecase(testcasePass)
+        userscoreRepository.saveAndFlush(
+            UserScore.builder().event(event.get()).user(user.get())
+                .question(question.get()).resultOfPassingTestecase(testcasePass)
                 .status(testcasePass == 10 ? "Pass All Test Cases" : "Fail")
                 .submitTime(submissionTime)
                 .runtimebyMsec(submitTimeRunTimeDTO.getRunTimeByMsec())
-                .bonusUnder30Mins(isWithin30Minutes && testcasePass == 10 ? "1" : "0")
+                .bonusUnder30Mins(
+                    isWithin30Minutes && testcasePass == 10 ? "1" : "0")
                 .bonusWithinQuestionRuntime(
-                        question.get().getBonusRuntime() > submitTimeRunTimeDTO.getRunTimeByMsec() && testcasePass == 10 ? "1" : "0")
-                .createdDate(LocalDateTime.now()).updatedDate(LocalDateTime.now())
-                .build());
+                    question.get().getBonusRuntime() > submitTimeRunTimeDTO
+                        .getRunTimeByMsec() && testcasePass == 10 ? "1" : "0")
+                .createdDate(LocalDateTime.now())
+                .updatedDate(LocalDateTime.now()).build());
         return true;
       } else {
         return false;
@@ -141,7 +145,8 @@ public class UserScoreServiceImpl implements UserScoreService {
       Optional<User> userOptional =
           userRepository.findById(userScore.getUser().getId());
       if (!userResultMap.containsKey(userScore.getUser().getId())) {
-        UserScoreResult.UserResult userResult = new UserScoreResult.UserResult();
+        UserScoreResult.UserResult userResult =
+            new UserScoreResult.UserResult();
         userResult.setName(userOptional.get().getUserName()); // Assuming user id as name
         // passingTestCaseNumber
         userResult.setPassingTestCaseNumber(new HashMap<>());

@@ -81,13 +81,13 @@ public class UserScoreController implements UserScoreOperation {
   }
 
   @Override
-  public boolean addScore(String eventId, String userID, String questionID,
+  public boolean addScore(String eventId, String userId, String questionId,
       String testcasePassTotal, SubmitTimeRunTimeDTO submitTimeRunTimeDTO) {
     Integer testcasePass = Integer.valueOf(testcasePassTotal);
 
     return userScoreService.addScore(Long.valueOf(eventId), //
-        Long.valueOf(userID), //
-        Long.valueOf(questionID), //
+        Long.valueOf(userId), //
+        Long.valueOf(questionId), //
         testcasePass, submitTimeRunTimeDTO);
   }
 

@@ -30,8 +30,17 @@ export const UserList = () => {
     function handleAddUser(event: React.MouseEvent<HTMLButtonElement, MouseEvent>, userId: string): void {
         const eventId = prompt("Enter Event ID:") || ""; // prompt user for event ID
         const apiUrl = `${BASE_URL}/api/join?userId=${userId}&eventId=${eventId}`;
-
-        fetch(apiUrl)
+        //  {{apiUrl}}/api/join?userId=12&eventId=6
+        fetch(apiUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userId: userId,
+                eventId: eventId,
+            }),
+        })
             .then(response => {
                 // handle response
                 console.log(response);
@@ -39,7 +48,6 @@ export const UserList = () => {
             .catch(error => {
                 // handle error
                 console.log(error);
-
             });
     }
 

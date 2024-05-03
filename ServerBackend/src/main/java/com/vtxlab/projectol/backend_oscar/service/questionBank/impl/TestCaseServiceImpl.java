@@ -122,9 +122,7 @@ public class TestCaseServiceImpl implements TestCaseService {
       } else {
         testCaseBuilder.append(", ").append(checkString(e.getExpectedOutput()));
       }
-      log.info("expected Output" + e.getExpectedOutput());
       testCaseBuilder.append(");");
-
     });
 
     testCaseBuilder.append(COUNT_RUNTIME).append(this.generateEndCodeBlock());
