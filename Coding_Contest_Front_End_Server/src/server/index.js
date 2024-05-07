@@ -61,9 +61,27 @@ app.get('/api', (req, res) => {
   res.json({ message: 'Hello! welcome to our api!' });
 });
 
+app.post('/api/run/:questionId', limiter, async (req, res) => {
+  const { questionId } = req.params;
+  const file = req.body;
+
+  const util = require('util');
+
+  console.log('req.body:', util.inspect(req.body, { depth: null }));
+
+  RunnerManager.run(file.lang, file.code, res, questionId, file.userId, file.userName);
+});
+
 app.get('/api/file/:lang/:questionId', limiter, async (req, res) => {
   try {
+    const util = require('util');
+
+    console.log('req.body :', util.inspect(req.body, { depth: null }));
+    console.log('req.params :', util.inspect(req.params, { depth: null }));
+
     const language = req.params.lang;
+    const userId = req.params.userId;
+    const userName = req.params.userName;
     const { questionId } = req.params;
     console.log(questionId + ' ' + language);
 
@@ -72,6 +90,8 @@ app.get('/api/file/:lang/:questionId', limiter, async (req, res) => {
       const file = {
         lang: language,
         code: content,
+        id: userId,
+        userName: userName
       };
       res.send(JSON.stringify(file));
       release();
@@ -82,19 +102,4 @@ app.get('/api/file/:lang/:questionId', limiter, async (req, res) => {
   }
 });
 
-app.post('/api/run/:questionId', limiter, async (req, res) => {
-  const { questionId } = req.params;
-  // const file = req.body;
-  const { file, userId, userName } = req.body;
-  console.log(`file.lang: ${file.lang}`,//
-    `file.code:${file.code}`,//
-    `questionId: ${questionId}`,
-    `userId: ${userId}`,//
-    `userName: ${userName}`//
-  );
-
-  RunnerManager.run(file.lang, file.code, res, questionId,userId,userName);
-
-
-});
 app.listen(PORT, () => console.log(`Listening on port ${PORT}!`));

@@ -32,21 +32,26 @@ module.exports = {
     const factory = new Factory(questionId);
     const runner = factory.createRunner(lang.toLowerCase(),questionId);
 
-    const directory = path.join(__dirname, 'temp');
 
-    let formattedUserId = userId.toString();
-    if (userId < 10) {
-      formattedUserId = '00' + formattedUserId;
-    } else if (userId < 100) {
-      formattedUserId = '0' + formattedUserId;
+    // let formattedUserId = userId.toString();
+    // if (userId < 10) {
+    //   formattedUserId = '00' + formattedUserId;
+    // } else if (userId < 100) {
+    //   formattedUserId = '0' + formattedUserId;
+    // }
+    
+    let formattedUserId = userId.toString().padStart(3, '0'); // Pad userId with leading zeros
+    const directory = path.join(__dirname, `temp`, `${formattedUserId}_${userName}`);
+
+    // Ensure that the parent directory exists before trying to create the user-specific directory
+    if (!fs.existsSync(path.dirname(directory))) {
+      fs.mkdirSync(path.dirname(directory), { recursive: true });
     }
 
-    const userDirectory = path.join(directory, `${formattedUserId}_${userName}`);
-    if (!fs.existsSync(userDirectory)) {
-      fs.mkdirSync(userDirectory);
+    if (!fs.existsSync(directory)) {
+      fs.mkdirSync(directory);
     }
-
-    const file = path.join(userDirectory, runner.defaultFile(questionId));//question file
+    const file = path.join(directory, runner.defaultFile(questionId));//question file
 
     const filename = path.parse(file).name; // main
     const extension = path.parse(file).ext; // .java
